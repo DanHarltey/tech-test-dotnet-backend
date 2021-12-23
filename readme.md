@@ -100,12 +100,48 @@ document.
 Q1. What 'code smells' / anti-patterns did you find in the existing 
 	implementation of part 1 & 2?
 
+I worked with the code as I would with a legacy code base. Seemed to have lower quality. There were some tests there but they were unreliable and would produce different results on different days. I moved the testing and the acceptance criteria into integration tests. This allowed me to move and alter the code at will and maintain simple test coverage.
+
+Issues with the existing code:
+
+- Fat controller.
+- No DI.
+- No automated build.
+- No obvious architecture.
+- Controller code is of poor quality, has bad variable names, has unneeded class level fields, is hard to read and is tightly coupled.
+- Failing tests.
+- Tests unreliable and would produce different results on different days.
+- No integration test.
+- No negative testing i.e. what happens if empty productIds provided
+
 Q2. What best practices have you used while implementing your solution?
+
+- Moved to a thin controller.
+- Added DI.
+- Added automated build.
+- Moved to a more clean architecture structure, but I didn’t want to over engineer it.
+- Added integration tests.
+- Improved the poor quality code.
+- Added more tests, made them reliable and all tests pass.
 
 Q3. What further steps would you take to improve the solution given more time?
 
+- Upgrade it to .Net 6
+- Added Swagger docs
+- Add unit tests to IDespatchDateInteractor
+- Add some negative tests
+- Could have split up the IDbContext into repositories or queries class/interfaces to increase decoupling.
+- There are no health checks, so I would add these. The addition of a health check url would ensure smoother operating of a production system.
+- There are no security headers CORS, CSP, HSTS, so these should be added.
+- Add docker support
+- Maybe add Bank holidays if required? 
+
+Quick note: one of the Acceptance Criteria needs a supplier with a lead time of 11 days. I couldn’t see one so I altered an existing one to have 11 days lead time.
+
 Q4. What's a technology that you're excited about and where do you see this 
     being applicable? (Your answer does not have to be related to this problem)
+
+I missed all the .Net 6 stuff when writing in this solution, switch expression would have been nicer. I like a bunch of technology. For me, the technology must be correct for the problem being solved. I am happy whenever I am building something.
 
 ## Request and Response Examples
 
