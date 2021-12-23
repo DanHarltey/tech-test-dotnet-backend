@@ -1,7 +1,7 @@
-﻿namespace Moonpig.PostOffice.Data
-{
-    using System.Linq;
+﻿using System.Linq;
 
+namespace Moonpig.PostOffice.Data
+{
     public interface IDbContext
     {
         IQueryable<Supplier> Suppliers { get; }
