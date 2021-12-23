@@ -93,7 +93,7 @@ namespace Moonpig.PostOffice.IntegrationTests.API.Controllers
             Assert.Equal(new DateTime(2018, 1, 8), locationDetail.Date);
         }
 
-        [Fact(Skip = "Broken")]
+        [Fact]
         public async Task OneOrderPlacedOnSaturdayWithOneDayLeadTime()
         {
             /*
@@ -113,7 +113,7 @@ namespace Moonpig.PostOffice.IntegrationTests.API.Controllers
             Assert.Equal(new DateTime(2018, 1, 9), locationDetail.Date);
         }
 
-        [Fact(Skip = "Broken")]
+        [Fact]
         public async Task OneOrderPlacedOnSundayWithOneDayLeadTime()
         {
             /*
@@ -133,7 +133,7 @@ namespace Moonpig.PostOffice.IntegrationTests.API.Controllers
             Assert.Equal(new DateTime(2018, 1, 9), locationDetail.Date);
         }
 
-        [Fact(Skip = "Broken")]
+        [Fact]
         public async Task OneOrderPlacedOnFridayWithSixsDaysLeadTime()
         {
             /*
@@ -147,14 +147,14 @@ namespace Moonpig.PostOffice.IntegrationTests.API.Controllers
             using var client = CreateClient();
 
             // Act
-            var locationDetail = await client.GetFromJsonAsync<DespatchDate>("/api/DespatchDate?productIds[0]=9&&orderDate=2018/05/01");
+            var locationDetail = await client.GetFromJsonAsync<DespatchDate>("/api/DespatchDate?productIds[0]=9&&orderDate=2018/01/05");
 
             // Assert
             Assert.Equal(new DateTime(2018, 1, 15), locationDetail.Date);
         }
 
 
-        [Fact( Skip = "Broken")]
+        [Fact]
         public async Task OneOrderPlacedOnFridayWithElevenDaysLeadTime()
         {
             /*

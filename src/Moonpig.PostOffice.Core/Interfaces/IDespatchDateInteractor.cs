@@ -5,6 +5,6 @@ namespace Moonpig.PostOffice.Core.Interfaces
 {
     public interface IDespatchDateInteractor
     {
-        DateTime Get(List<int> productIds, DateTime orderDate);
+        DateTime CalculateDespatchDate(List<int> productIds, DateTime orderDate);
     }
 }

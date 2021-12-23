@@ -10,27 +10,63 @@ namespace Moonpig.PostOffice.Core.Interactors
     {
         private readonly IDbContext _dbContext;
 
-        private DateTime _mlt;
-
         public DespatchDateInteractor(IDbContext dbContext)
             => _dbContext = dbContext;
 
-        public DateTime Get(List<int> productIds, DateTime orderDate)
+        public DateTime CalculateDespatchDate(List<int> productIds, DateTime orderDate)
         {
-            _mlt = orderDate; // max lead time
-            foreach (var ID in productIds)
+            var leadTimeDays = GetMaxLeadTime(productIds);
+
+            var despatchDate = orderDate;
+
+            for (int i = 0; i < leadTimeDays; i++)
             {
-                var s = _dbContext.Products.Single(x => x.ProductId == ID).SupplierId;
-                var lt = _dbContext.Suppliers.Single(x => x.SupplierId == s).LeadTime;
-                if (orderDate.AddDays(lt) > _mlt)
-                    _mlt = orderDate.AddDays(lt);
+                var daysToAdd = 1;
+                daysToAdd += WeekendOffset(despatchDate.DayOfWeek);
+
+                despatchDate = despatchDate.AddDays(daysToAdd);
             }
-            if (_mlt.DayOfWeek == DayOfWeek.Saturday)
+
+            return despatchDate;
+        }
+
+        private int GetMaxLeadTime(List<int> productIds)
+            => productIds
+                .Select(GetProductLeadTime)
+                .Max();
+
+        private int GetProductLeadTime(int productId)
+        {
+            var supplierId = _dbContext.Products
+                .Where(x => x.ProductId == productId)
+                .Select(x => x.SupplierId)
+                .Single();
+
+            var supplierLeadTime = _dbContext.Suppliers
+                .Where(x => x.SupplierId == supplierId)
+                .Select(x => x.LeadTime)
+                .Single();
+
+            return supplierLeadTime;
+        }
+
+        private static int WeekendOffset(DayOfWeek dayOfWeek)
+        {
+            switch (dayOfWeek)
             {
-                return _mlt.AddDays(2);
+                case DayOfWeek.Monday:
+                case DayOfWeek.Tuesday:
+                case DayOfWeek.Wednesday:
+                case DayOfWeek.Thursday:
+                    return 0;
+                case DayOfWeek.Friday:
+                case DayOfWeek.Saturday:
+                    return 2;
+                case DayOfWeek.Sunday:
+                    return 1;
+                default:
+                    throw new NotSupportedException();
             }
-            else if (_mlt.DayOfWeek == DayOfWeek.Sunday) return _mlt.AddDays(1);
-            else return _mlt;
         }
     }
 }

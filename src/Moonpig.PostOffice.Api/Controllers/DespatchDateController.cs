@@ -17,7 +17,7 @@
         [HttpGet]
         public DespatchDate Get(List<int> productIds, DateTime orderDate)
         {
-            var despatchDate = _despatchDate.Get(productIds, orderDate);
+            var despatchDate = _despatchDate.CalculateDespatchDate(productIds, orderDate);
 
             return new DespatchDate { Date = despatchDate };
         }
